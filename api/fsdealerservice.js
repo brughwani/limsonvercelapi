@@ -15,7 +15,7 @@ if (!admin.apps.length) {
     credential: admin.credential.cert(serviceAccount),
   });
 }
- const firestore = admin.firestore();
+ //const firestore = admin.firestore();
 
 
 
@@ -100,9 +100,9 @@ if (!admin.apps.length) {
 
 
 export async function GET(req) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  // res.setHeader('Access-Control-Allow-Origin', '*');
+  // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
     res.status(200).end();
