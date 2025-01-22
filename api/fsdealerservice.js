@@ -128,6 +128,7 @@ export async function GET(req) {
   
       if (getAllDealers === 'true') {
         const dealersByLocation = {};
+        
   
         dealers.forEach(record => {
           const location = record.locality;

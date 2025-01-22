@@ -1,5 +1,8 @@
 const admin = require('firebase-admin');
 import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
+
 
 
 
@@ -125,7 +128,8 @@ export async function GET(req) {
 
   try {
     let products;
-
+   products = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
+   
     // if (process.env.ACTIVE_DEPLOYMENT === 'local') {
     //   // Fetch product data from static JSON file
     //   products = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
