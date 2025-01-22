@@ -100,6 +100,11 @@ if (!admin.apps.length) {
 // }
 
 export async function GET(req) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  
   const { searchParams } = new URL(req.url);
   const level = searchParams.get('level');
   const brand = searchParams.get('brand');
