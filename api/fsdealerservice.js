@@ -124,7 +124,7 @@ export async function GET(req) {
   
     try {
       // Fetch dealer data from static JSON file
-      const dealers = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'Dealers.json'), 'utf8'));
+      const dealers = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'Dealer.json'), 'utf8'));
   
       if (getAllDealers === 'true') {
         const dealersByLocation = {};
