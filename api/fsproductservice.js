@@ -1,4 +1,7 @@
 const admin = require('firebase-admin');
+import { NextResponse } from 'next/server';
+
+
 
 if (!admin.apps.length) {
   const serviceAccount = {
@@ -100,18 +103,18 @@ if (!admin.apps.length) {
 // }
 
 export async function GET(req) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-      if (req.method === 'OPTIONS') {
-      res.status(200).end();
-      return;
-    }
+    // res.setHeader('Access-Control-Allow-Origin', '*');
+    // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    //   if (req.method === 'OPTIONS') {
+    //   res.status(200).end();
+    //   return;
+    // }
   
-    if (req.method !== 'GET') {
-      res.status(405).send('Method Not Allowed');
-      return;
-    }
+    // if (req.method !== 'GET') {
+    //   res.status(405).send('Method Not Allowed');
+    //   return;
+    // }
   
 
   
@@ -166,9 +169,24 @@ export async function GET(req) {
         responseObj = productsByBrand;
     }
 
-    return NextResponse.json(responseObj);
+    const response = NextResponse.json(responseObj);
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    return response;
   } catch (error) {
     console.error("Server error:", error);
-    return NextResponse.json({ error: 'Server error' }, { status: 500 });
+    const response = NextResponse.json({ error: 'Server error' }, { status: 500 });
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    return response;
   }
+}
+export async function OPTIONS(req) {
+  const response = NextResponse.json({});
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  return response;
 }

@@ -144,8 +144,11 @@ export async function GET(req) {
             dealersByLocation[location].push(dealerInfo);
           }
         });
-  
-        return NextResponse.json(dealersByLocation);
+        const response = NextResponse.json(dealersByLocation);
+        response.headers.set('Access-Control-Allow-Origin', '*');
+        response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        return response;
       }
   
       if (getLocations === 'true') {
@@ -157,19 +160,41 @@ export async function GET(req) {
             locations.add(location);
           }
         });
-  
-        return NextResponse.json(Array.from(locations));
+        const response = NextResponse.json(Array.from(locations));
+        response.headers.set('Access-Control-Allow-Origin', '*');
+        response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        return response;
       }
   
       if (locality) {
         const filteredDealers = dealers.filter(record => record.locality === locality);
-        return NextResponse.json(filteredDealers);
+        const response = NextResponse.json(filteredDealers);
+    
+        response.headers.set('Access-Control-Allow-Origin', '*');
+      response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+      return response;
       }
-  
-      return NextResponse.json({ error: 'Missing required query parameters' }, { status: 400 });
-  
+      const response = NextResponse.json({ error: 'Missing required query parameters' }, { status: 400 });
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+      return response;
     } catch (error) {
       console.error("Server error:", error);
-      return NextResponse.json({ error: 'Server error' }, { status: 500 });
-    }
+    const response = NextResponse.json({ error: 'Server error' }, { status: 500 });
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    return response;
+   }
+  }
+
+  export async function OPTIONS(req) {
+    const response = NextResponse.json({});
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    return response;
   }
