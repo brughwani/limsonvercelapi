@@ -123,7 +123,7 @@ export async function GET(req) {
     products.forEach(data => {
       const brandName = data['Brand name'];
       const categoryName = data['Category'];
-      const productName = data['Product name'];
+      const productName = data['Product Name'];
 
       if (!productsByBrand[brandName]) {
         productsByBrand[brandName] = {};
