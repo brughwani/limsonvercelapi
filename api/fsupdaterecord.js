@@ -70,6 +70,8 @@ module.exports = async (req, res) => {
       if (!updates.id || !updates.fields) {
         return res.status(400).json({ error: 'Invalid update format' });
       }
+console.log(updates)
+
 
       const docRef = firestore.collection('admin').doc(updates.id);
       await docRef.update(updates.fields);
