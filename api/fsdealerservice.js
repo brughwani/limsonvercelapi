@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+const withAuth = require('../middleware/withAuth');
+
+//const withAuth = require('./withAuth');
 
 const admin = require('firebase-admin');
 
@@ -99,7 +102,7 @@ if (!admin.apps.length) {
 // };
 
 
-export async function GET(req) {
+const handler = async (req, res) => {
   // res.setHeader('Access-Control-Allow-Origin', '*');
   // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -199,3 +202,4 @@ export async function GET(req) {
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
     return response;
   }
+  module.exports = withAuth(handler);

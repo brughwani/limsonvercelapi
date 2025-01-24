@@ -1,4 +1,6 @@
 const { Firestore } = require('firestore');
+const withAuth = require('./withAuth');
+
 
 const admin = require('firebase-admin');
 
@@ -25,7 +27,7 @@ if (!admin.apps.length) {
 //   });
 
   const firestore = admin.firestore();
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -60,7 +62,7 @@ module.exports = async (req, res) => {
     console.log('Data to be inserted:', data);
 
     // Insert data into Firestore
-    const docRef = await firestore.collection('Service').add(data);
+    const docRef = await firestore.collection('Admin').add(data);
 
     console.log('Document written with ID:', docRef.id);
 
@@ -74,3 +76,4 @@ module.exports = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+module.exports = withAuth(handler);

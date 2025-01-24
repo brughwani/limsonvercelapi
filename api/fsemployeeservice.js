@@ -20,7 +20,7 @@ if (!admin.apps.length) {
 
 
 
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -141,3 +141,5 @@ module.exports = async (req, res) => {
 
   return res.status(405).send('Method Not Allowed');
 };
+
+module.exports = withAuth(handler);

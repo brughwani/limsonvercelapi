@@ -1,4 +1,5 @@
 const admin = require('firebase-admin');
+const withAuth = require('./withAuth');
 
 if (!admin.apps.length) {
   const serviceAccount = {
@@ -15,7 +16,7 @@ if (!admin.apps.length) {
 
 
 
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -48,3 +49,6 @@ module.exports = async (req, res) => {
       res.status(500).json({ error: 'Server error' });
     }
   };
+  module.exports = withAuth(handler);
+  
+

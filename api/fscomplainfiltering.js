@@ -1,4 +1,6 @@
 const admin = require('firebase-admin');
+const withAuth = require('./withAuth');
+
 
 if (!admin.apps.length) {
   const serviceAccount = {
@@ -27,7 +29,7 @@ function isDateInRange(dateToCheck, startDate, endDate) {
   return date >= start && date <= end;
 }
 
-module.exports = async (req, res) => {
+const fscomplainfiltering = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -103,3 +105,4 @@ module.exports = async (req, res) => {
     res.status(500).send('Error fetching records from Firestore');
   }
 };
+module.exports = withAuth(fscomplainfiltering);
