@@ -49,6 +49,9 @@ module.exports = async (req, res) => {
     const userDoc = userSnapshot.docs[0];
     const userData = userDoc.data();
 
+    console.log('User data:', userData);
+    console.log(userDoc);
+
     // Check password
     const passwordMatch = await bcrypt.compare(password, userData.password);
     if (!passwordMatch) {
