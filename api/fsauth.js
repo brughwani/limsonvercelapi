@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 if (!admin.apps.length) {
   const serviceAccount = {
     projectId: process.env.FIRESTORE_PROJECT_ID,
-    privateKey: process.env.FIRESTORE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Handle newlines
+    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Handle newlines
     clientEmail: process.env.FIRESTORE_CLIENT_EMAIL,
   };
 
