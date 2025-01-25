@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
     const email = `${phone}@xyz.in`;
 
     // Fetch user by email
-    const userSnapshot = await firestore.collection('users').where('email', '==', email).get();
+    const userSnapshot = await firestore.collection('Employee').where('Phone', '==', phone).get();
 
     if (userSnapshot.empty) {
       return res.status(400).json({ error: 'User not found' });
@@ -56,7 +56,7 @@ module.exports = async (req, res) => {
     }
 
     // Check role and app access
-    const role = userData.role;
+    const role = userData.role.toLowerCase();
     // if ((role === 'karigar' && app === 'admin') || (role === 'support' && app === 'admin')) {
     //   return res.status(403).json({ error: 'Access denied' });
     // }
@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
     // Generate custom token
     const customToken = await admin.auth().createCustomToken(userDoc.id, { role: userData.role });
 
-    return res.status(200).json({ token: customToken, role: userData.role });
+    return res.status(200).json({ token: customToken});
   } catch (error) {
     console.error('Error signing in:', error);
     return res.status(500).json({ error: 'Server error' });
