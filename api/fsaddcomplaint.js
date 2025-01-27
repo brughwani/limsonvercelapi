@@ -4,11 +4,12 @@ const withAuth = require('./withAuth');
 
 const admin = require('firebase-admin');
 
+
 if (!admin.apps.length) {
   const serviceAccount = {
-    projectId: process.env.FIRESTORE_PROJECT_ID,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Handle newlines
-    clientEmail: process.env.FIRESTORE_CLIENT_EMAIL,
+    projectId: process.env.project_id,
+    privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'), // Handle newlines
+    clientEmail: process.env.client_email,
   };
 
   admin.initializeApp({
