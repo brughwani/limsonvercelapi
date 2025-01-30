@@ -30,17 +30,20 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { phone, password } = req.body;
+  const { phone, password, app } = req.body;
 
   if (!phone || !password) {
     return res.status(400).json({ error: 'Phone and password are required' });
   }
 
   try {
-    const email = `${phone}@xyz.in`;
+    // Trim whitespace and ensure case sensitivity
+    const trimmedPhone = phone.trim();
 
-    // Fetch user by email
-    const userSnapshot = await firestore.collection('Employee').where('Phone', '==', phone).get();
+    // Fetch user by phone number
+    const userSnapshot = await firestore.collection('Employee').where('Phone', '==', trimmedPhone).get();
+
+    console.log(userSnapshot);
 
     if (userSnapshot.empty) {
       return res.status(400).json({ error: 'User not found' });
@@ -52,6 +55,9 @@ module.exports = async (req, res) => {
     console.log('User data:', userData);
     console.log(userDoc);
 
+    // Create a dummy email from the phone number
+    const email = `${trimmedPhone}@xyz.in`;
+
     // Check password
     const passwordMatch = await bcrypt.compare(password, userData.password);
     if (!passwordMatch) {
@@ -60,20 +66,17 @@ module.exports = async (req, res) => {
 
     // Check role and app access
     const role = userData.role.toLowerCase();
-    // if ((role === 'karigar' && app === 'admin') || (role === 'support' && app === 'admin')) {
-    //   return res.status(403).json({ error: 'Access denied' });
-    // }
-    if(role!==app)
-    {
-        return res.status(403).json({ error: 'Access denied' });
+    if (role !== app) {
+      return res.status(403).json({ error: 'Access denied' });
     }
 
     // Generate custom token
     const customToken = await admin.auth().createCustomToken(userDoc.id, { role: userData.role });
 
-    return res.status(200).json({ token: customToken});
+    return res.status(200).json({ token: customToken, role: userData.role });
   } catch (error) {
     console.error('Error signing in:', error);
     return res.status(500).json({ error: 'Server error' });
   }
+
 };
