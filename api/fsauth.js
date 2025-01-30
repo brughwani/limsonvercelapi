@@ -70,8 +70,8 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
     const email = `${trimmedPhone}@xyz.in`;
 
     // Check password
-    const passwordMatch = await bcrypt.compare(password, userData.password);
-    if (!passwordMatch) {
+   // const passwordMatch = await bcrypt.compare(password, userData.password);
+    if (password!==userData.password) {
       return res.status(400).json({ error: 'Invalid password' });
     }
 
