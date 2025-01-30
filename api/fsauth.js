@@ -47,10 +47,12 @@ console.log('Request body:', req.body);
 
 
 
-
+ // Fetch user by phone number
+ const userSnapshot1 = await firestore.collection('Employee').where('Phone', '==', phone).limit(1).get();
+console.log(userSnapshot1);
     // Fetch user by phone number
-    const userSnapshot = await firestore.collection('Employee').where('Phone', '==', phone).get();
-
+    const userSnapshot = await firestore.collection('Employee').where('Phone', '==', trimmedPhone).get();
+console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users found
     console.log(`Found ${userSnapshot.size} user(s)`); // Log the number of users found
 
 
