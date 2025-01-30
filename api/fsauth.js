@@ -32,6 +32,7 @@ module.exports = async (req, res) => {
 
   const { phone, password, app } = req.body;
 
+console.log('Request body:', req.body);
   if (!phone || !password) {
     return res.status(400).json({ error: 'Phone and password are required' });
   }
