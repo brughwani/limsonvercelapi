@@ -41,6 +41,11 @@ console.log('Request body:', req.body);
     // Trim whitespace and ensure case sensitivity
     const trimmedPhone = phone.trim();
 
+    const emp=await firestore.collection('Employee').get()
+
+    console.log(emp.docs.map(doc=>doc.data()));
+
+
     // Fetch user by phone number
     const userSnapshot = await firestore.collection('Employee').where('Phone', '==', trimmedPhone).get();
 
