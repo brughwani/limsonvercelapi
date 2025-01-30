@@ -43,7 +43,8 @@ module.exports = async (req, res) => {
     // Fetch user by phone number
     const userSnapshot = await firestore.collection('Employee').where('Phone', '==', trimmedPhone).get();
 
-    console.log(userSnapshot);
+    console.log(`Found ${userSnapshot.size} user(s)`); // Log the number of users found
+
 
     if (userSnapshot.empty) {
       return res.status(400).json({ error: 'User not found' });
