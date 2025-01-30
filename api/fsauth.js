@@ -46,8 +46,10 @@ console.log('Request body:', req.body);
     console.log(emp.docs.map(doc=>doc.data()));
 
 
+
+
     // Fetch user by phone number
-    const userSnapshot = await firestore.collection('Employee').where('Phone', '==', trimmedPhone).get();
+    const userSnapshot = await firestore.collection('Employee').where('Phone', '==', phone).get();
 
     console.log(`Found ${userSnapshot.size} user(s)`); // Log the number of users found
 
