@@ -76,7 +76,7 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
     }
 
     // Check role and app access
-    const role = userData.role.toLowerCase();
+    const role = userData.Role.toLowerCase();
     if (role !== app) {
       return res.status(403).json({ error: 'Access denied' });
     }
