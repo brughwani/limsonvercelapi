@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
-const withAuth = require('../middleware/withAuth');
+const withAuth = require('./withAuth');
 
 
 //const { Firestore } = require('@google-cloud/firestore');
