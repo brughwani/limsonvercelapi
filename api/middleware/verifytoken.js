@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 const withAuth = require('./withAuth');
 const NodeCache = require('node-cache');
-
+import corsMiddleware from './cors';
 const tokenCache = new NodeCache(); // No default TTL, we'll set it dynamically
 
 
