@@ -18,7 +18,8 @@ if (!admin.apps.length) {
 }
  //const firestore = admin.firestore();
 
-module.exports = async (req, res, next) => {
+ const verifyToken = async (req, res, next) => {
+  corsMiddleware(req, res, async () => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -47,4 +48,8 @@ module.exports = async (req, res, next) => {
     console.error('Error verifying token:', error);
     return res.status(401).json({ error: 'Unauthorized' });
   }
+
+});
 };
+
+module.exports = verifyToken;
