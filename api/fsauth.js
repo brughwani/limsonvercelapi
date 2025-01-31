@@ -82,8 +82,7 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
     }
 
     // Generate custom token
-    const customToken = await admin.auth().createCustomToken(userDoc.id, { role: userData.role ,exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60) // 24 hours from now
-    });
+    const customToken = await admin.auth().createCustomToken(userDoc.id, { role: userData.role  });
 
     return res.status(200).json({ token: customToken, role: userData.role });
   } catch (error) {
