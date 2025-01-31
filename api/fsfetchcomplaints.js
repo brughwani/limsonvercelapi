@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-const withAuth = require('../middleware/withAuth');
+const withAuth = require('/middleware/withAuth');
 
 
 if (!admin.apps.length) {
