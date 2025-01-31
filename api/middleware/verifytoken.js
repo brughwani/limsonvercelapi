@@ -1,5 +1,9 @@
 const admin = require('firebase-admin');
 const withAuth = require('./withAuth');
+const NodeCache = require('node-cache');
+
+const tokenCache = new NodeCache(); // No default TTL, we'll set it dynamically
+
 
 
 if (!admin.apps.length) {
@@ -23,9 +27,21 @@ module.exports = async (req, res, next) => {
 
   const token = authHeader.split(' ')[1];
 
+    // Check if the token is in the cache
+    const cachedToken = tokenCache.get(token);
+    if (cachedToken) {
+      req.user = cachedToken;
+      return next();
+    }
+
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
     req.user = decodedToken;
+    const expiresIn = decodedToken.exp * 1000 - Date.now();
+    if (expiresIn > 0) {
+      // Cache the verified token with the calculated TTL
+      tokenCache.set(token, decodedToken, expiresIn / 1000);
+    }
     next();
   } catch (error) {
     console.error('Error verifying token:', error);
