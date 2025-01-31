@@ -4,6 +4,10 @@
 // const firestore = new Firestore();
 
 const admin = require('firebase-admin');
+const withAuth = require('../middleware/withAuth');
+
+
+
 
 if (!admin.apps.length) {
   const serviceAccount = {
