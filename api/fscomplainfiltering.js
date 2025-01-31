@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 //const withAuth = require('./withAuth');
-const withAuth = require('/middleware/withAuth');
+const withAuth = require('./middleware/withAuth');
 
 
 

@@ -4,7 +4,7 @@
 // const firestore = new Firestore();
 
 const admin = require('firebase-admin');
-const withAuth = require('/middleware/withAuth');
+const withAuth = require('./middleware/withAuth');
 
 
 
