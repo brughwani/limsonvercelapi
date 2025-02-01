@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 //const bcrypt = require('bcrypt');
-const axios = require('axios');
+//const axios = require('axios');
 
 //const withAuth = require('./withAuth');
 
@@ -91,11 +91,11 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
     // Generate custom token
     const customToken = await admin.auth().createCustomToken(userDoc.id, { role: userData.role  });
    // Exchange custom token for ID token
-   const idTokenResponse = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${process.env.firebase_private_key}`, {
-    token: customToken,
-    returnSecureToken: true
-  });
-    return res.status(200).json({ token: idTokenResponse.data.idToken, role: userData.role });
+  //  const idTokenResponse = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${process.env.firebase_private_key}`, {
+  //   token: customToken,
+  //   returnSecureToken: true
+  // });
+    return res.status(200).json({ token: customToken, role: userData.role });
   } catch (error) {
     console.error('Error signing in:', error);
     return res.status(500).json({ error: 'Server error' });
