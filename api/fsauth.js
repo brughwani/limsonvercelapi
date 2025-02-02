@@ -22,7 +22,22 @@ if (!admin.apps.length) {
 const firestore = admin.firestore();
 
 const fs=new Firestore();
-
+async function getIdToken(customToken) {
+  try {
+    const response = await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.firebase_private_key}`,
+      {
+        email,
+        password,
+        returnSecureToken: true
+      }
+    );
+    return response.data.idToken;
+  } catch (error) {
+    console.error('Error exchanging custom token for ID token:', error);
+    throw error;
+  }
+}
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
@@ -89,13 +104,18 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
     }
 
     // Generate custom token
-    const customToken = await admin.auth().createCustomToken(userDoc.id, { role: userData.role  });
+    // const customToken = await admin.auth().si
+    // .createCustomToken(userDoc.id, { role: userData.role  });
    // Exchange custom token for ID token
   //  const idTokenResponse = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${process.env.firebase_private_key}`, {
   //   token: customToken,
   //   returnSecureToken: true
   // });
-    return res.status(200).json({ token: customToken, role: userData.role });
+  const idToken = await getIdToken(email,password);
+
+  
+
+    return res.status(200).json({ token: idToken, role: userData.role });
   } catch (error) {
     console.error('Error signing in:', error);
     return res.status(500).json({ error: 'Server error' });
