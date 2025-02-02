@@ -22,7 +22,7 @@ if (!admin.apps.length) {
 const firestore = admin.firestore();
 
 const fs=new Firestore();
-async function getIdToken(customToken) {
+async function getIdToken(email,password) {
   try {
     const response = await axios.post(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.firebase_private_key}`,
