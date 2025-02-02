@@ -25,7 +25,7 @@ const fs=new Firestore();
 async function getIdToken(email,password) {
   try {
     const response = await axios.post(
-      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.firebase_private_key}`,
+      `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.firebase_web_api_key}`,
       {
         email,
         password,
