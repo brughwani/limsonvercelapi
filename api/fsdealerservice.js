@@ -121,6 +121,8 @@ const handler = async (req, res) => {
 console.log("req",req)
 
 
+
+console.log("req.url", req.NextUrl);
 const { searchParams } = new URL(req.NextUrl);
   //  const { searchParams } = new URL(req.url);
  // const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
