@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 const withAuth = require('./middleware/withAuth');
@@ -121,9 +121,9 @@ const handler = async (req, res) => {
 console.log("req",req)
 
 
-
+const { searchParams } = new URL(req.NextUrl);
   //  const { searchParams } = new URL(req.url);
-  const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
+ // const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
     const locality = searchParams.get('locality');
     const getLocations = searchParams.get('getLocations');
     const getAllDealers = searchParams.get('getAllDealers');

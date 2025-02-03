@@ -1,5 +1,5 @@
 const admin = require('firebase-admin');
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 const withAuth = require('./middleware/withAuth');
@@ -122,8 +122,8 @@ const handler = async (req, res) => {
   
 
   console.log("req.url", req.url);
- // const { searchParams } = new URL(req.url);
- const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
+  const { searchParams } = new URL(req.NextUrl);
+// const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
   const level = searchParams.get('level');
   const brand = searchParams.get('brand');
   const category = searchParams.get('category');
