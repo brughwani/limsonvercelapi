@@ -53,6 +53,12 @@ const handler = async (req, res) => {
         'salary': salary
       } = req.body.fields;
 
+      const userRecord = await admin.auth().createUser({
+        email: `${phone}@xyz.in`,
+        password: password,
+      });
+      
+
       console.log('Data to be inserted:', req.body.fields);
 
       const data = {
