@@ -122,7 +122,7 @@ const handler = async (req, res) => {
 
 
 
-    const { searchParams } = new URL(req.nextURL);
+    const { searchParams } = new URL(req.nextUrl);
     const locality = searchParams.get('locality');
     const getLocations = searchParams.get('getLocations');
     const getAllDealers = searchParams.get('getAllDealers');
