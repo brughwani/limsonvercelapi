@@ -21,7 +21,7 @@ async function migrateUsers() {
     let migratedCount = 0;
     for (const userDoc of usersSnapshot.docs) {
       const userData = userDoc.data();
-      const phone = userData.Phone.trim();
+      const phone = userData.Phone;
       const email = `${phone}@xyz.in`;
 
       // Skip if already migrated
