@@ -118,11 +118,11 @@ const handler = async (req, res) => {
     res.status(405).send('Method Not Allowed');
     return;
   }
+console.log("req",req)
 
 
 
-
-    const { searchParams } = new URL(req.nextUrl);
+    const { searchParams } = new URL(req.url);
     const locality = searchParams.get('locality');
     const getLocations = searchParams.get('getLocations');
     const getAllDealers = searchParams.get('getAllDealers');
