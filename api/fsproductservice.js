@@ -123,7 +123,7 @@ const handler = async (req, res) => {
 
   console.log("req.url", req.url);
  // const { searchParams } = new URL(req.url);
- const { searchParams } = new URL(req.url);
+ const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
   const level = searchParams.get('level');
   const brand = searchParams.get('brand');
   const category = searchParams.get('category');
