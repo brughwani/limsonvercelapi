@@ -120,10 +120,12 @@ const handler = async (req, res) => {
   }
 console.log("req",req)
 
+const { nextUrl } = req;
+const searchParams = nextUrl.searchParams;
+    
 
-
-console.log("req.url", req.NextUrl);
-const { searchParams } = new URL(req.NextUrl);
+// console.log("req.url", req.NextUrl);
+// const { searchParams } = new URL(req.NextUrl);
   //  const { searchParams } = new URL(req.url);
  // const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
     const locality = searchParams.get('locality');
