@@ -104,7 +104,7 @@ if (!admin.apps.length) {
 // };
 
 
-const handler = async (req, res) => {
+const handler = async (req) => {
   // res.setHeader('Access-Control-Allow-Origin', '*');
   // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
   // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -123,12 +123,13 @@ console.log("req",req)
 // const { nextUrl } = req;
 // const searchParams = nextUrl.searchParams;
     
-const url = new URL(req.url);
-const searchParams = req.url.searchParams;
+//const url = new URL(req.url);
+//const searchParams = req.url.searchParams;
 // console.log("req.url", req.NextUrl);
 // const { searchParams } = new URL(req.NextUrl);
   //  const { searchParams } = new URL(req.url);
  // const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
+ const { searchParams } = req.nextUrl;
     const locality = searchParams.get('locality');
     const getLocations = searchParams.get('getLocations');
     const getAllDealers = searchParams.get('getAllDealers');
