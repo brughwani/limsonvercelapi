@@ -124,7 +124,7 @@ console.log("req",req)
 // const searchParams = nextUrl.searchParams;
     
 const url = new URL(req.url);
-const searchParams = url.searchParams;
+const searchParams = req.url.searchParams;
 // console.log("req.url", req.NextUrl);
 // const { searchParams } = new URL(req.NextUrl);
   //  const { searchParams } = new URL(req.url);
