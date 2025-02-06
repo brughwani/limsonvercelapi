@@ -133,7 +133,7 @@ console.log("req",req)
 //const searchParams= req.nextUrl.searchParams;
 
 const baseurl='https://limsonvercelapi2.vercel.app';
-const url1 = new URL(req.url, baseUrl);
+const url1 = new URL(req.url, baseurl);
     
    
 console.log(req.url);
