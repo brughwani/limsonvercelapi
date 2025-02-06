@@ -132,7 +132,7 @@ console.log("req",req)
 // const { searchParams } = req.nextUrl;
 //const searchParams= req.nextUrl.searchParams;
 
-console.log(req.nextUrl);
+console.log(req.url);
 
 const searchParams = req.nextUrl ? req.nextUrl.searchParams : new URL(req.url).searchParams;
     const locality = searchParams.get('locality');
