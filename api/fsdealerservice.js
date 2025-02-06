@@ -134,7 +134,7 @@ console.log("req",req)
 
 console.log(req.url);
 
-const searchParams = req.nextUrl ? req.nextUrl.searchParams : new URL(req.url).searchParams;
+const searchParams = req.url ? req.url.searchParams : new URL(req.url).searchParams;
     const locality = searchParams.get('locality');
     const getLocations = searchParams.get('getLocations');
     const getAllDealers = searchParams.get('getAllDealers');
