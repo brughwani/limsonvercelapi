@@ -132,13 +132,17 @@ console.log("req",req)
 // const { searchParams } = req.nextUrl;
 //const searchParams= req.nextUrl.searchParams;
 
+const baseurl='https://limsonvercelapi2.vercel.app';
+const url1 = new URL(req.url, baseUrl);
+    
+   
 console.log(req.url);
 
-const searchParams = req.url ? req.url.searchParams : new URL(req.url).searchParams;
+//const searchParams = req.url ? req.url.searchParams : new URL(req.url).searchParams;
 console.log("searchParams",searchParams);
-    const locality = searchParams.get('locality');
-    const getLocations = searchParams.get('getLocations');
-    const getAllDealers = searchParams.get('getAllDealers');
+    const locality = url1.searchParams.get('locality');
+    const getLocations = url1.searchParams.get('getLocations');
+    const getAllDealers = url1.searchParams.get('getAllDealers');
   
     try {
       // Fetch dealer data from static JSON file
