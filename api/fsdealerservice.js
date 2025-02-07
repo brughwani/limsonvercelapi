@@ -6,19 +6,33 @@ const withAuth = require('./middleware/withAuth');
 const admin = require('firebase-admin');
 
 
-if (!admin.apps.length) {
-  const serviceAccount = {
-    projectId: process.env.project_id,
-    privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'), // Handle newlines
-    clientEmail: process.env.client_email,
-  };
+// if (!admin.apps.length) {
+//   const serviceAccount = {
+//     projectId: process.env.project_id,
+//     privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'), // Handle newlines
+//     clientEmail: process.env.client_email,
+//   };
 
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-}
- 
+//   admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//   });
+// }
+ if (!admin.apps.length) {
+   try {
+     const serviceAccount = {
+       projectId: process.env.project_id,
+       privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'),
+       clientEmail: process.env.client_email,
+     };
+     
+     admin.initializeApp({
+       credential: admin.credential.cert(serviceAccount),
+     });
+   } catch (error) {
+     console.error("Firebase Admin Initialization Error:", error);
+   }
+ }
 
 
 const handler = async (req) => {
@@ -48,7 +62,7 @@ const url1 = new URL(req.url, baseurl);
 console.log(req.url);
 
 //const searchParams = req.url ? req.url.searchParams : new URL(req.url).searchParams;
-console.log("searchParams",url1.searchParams);
+//console.log("searchParams",url1.searchParams);
     const locality = url1.searchParams.get('locality');
     const getLocations = url1.searchParams.get('getLocations');
     const getAllDealers = url1.searchParams.get('getAllDealers');

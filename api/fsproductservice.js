@@ -123,13 +123,13 @@ if (!admin.apps.length) {
 
 const handler = async (req, res) => {
 
-  if (req.method === 'OPTIONS') {
-    const response = NextResponse.json({}, { status: 200 });
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-    return response;
-}
+    if (req.method === 'OPTIONS') {
+      const response = NextResponse.json({}, { status: 200 });
+      response.headers.set('Access-Control-Allow-Origin', '*');
+      response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+      return response;
+  }
     // res.setHeader('Access-Control-Allow-Origin', '*');
     // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
     // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
