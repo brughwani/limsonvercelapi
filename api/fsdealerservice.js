@@ -35,18 +35,19 @@ const admin = require('firebase-admin');
  }
 
 
-const handler = async (req) => {
-  // res.setHeader('Access-Control-Allow-Origin', '*');
-  // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+const handler = async (req,res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
-      const response = NextResponse.json({}, { status: 200 });
-      response.headers.set('Access-Control-Allow-Origin', '*');
-      response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-      response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-      return response;
-  }
+      // const response = NextResponse.json({}, { status: 200 });
+      // response.headers.set('Access-Control-Allow-Origin', '*');
+      // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+      // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+      // return response;
+      return res.status(200).json({});
+    }
 
   if (req.method !== 'GET') {
     res.status(405).send('Method Not Allowed');
@@ -59,7 +60,7 @@ const baseurl='https://limsonvercelapi2.vercel.app';
 const url1 = new URL(req.url, baseurl);
     
    
-console.log(req.url);
+//console.log(req.url);
 
 //const searchParams = req.url ? req.url.searchParams : new URL(req.url).searchParams;
 //console.log("searchParams",url1.searchParams);
@@ -90,11 +91,13 @@ console.log(req.url);
             dealersByLocation[location].push(dealerInfo);
           }
         });
-        const response = NextResponse.json(dealersByLocation, { status: 200 });
-        response.headers.set('Access-Control-Allow-Origin', '*');
-        response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-        return response;
+        // const response = NextResponse.json(dealersByLocation, { status: 200 });
+        // response.headers.set('Access-Control-Allow-Origin', '*');
+        // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+        // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        // return response;
+        return res.status(200).json(dealersByLocation);
+
       }
   
       if (getLocations === 'true') {
@@ -106,34 +109,38 @@ console.log(req.url);
             locations.add(location);
           }
         });
-        const response = NextResponse.json(Array.from(locations), { status: 200 });
-        response.headers.set('Access-Control-Allow-Origin', '*');
-        response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-        return response;
+        // const response = NextResponse.json(Array.from(locations), { status: 200 });
+        // response.headers.set('Access-Control-Allow-Origin', '*');
+        // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+        // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        // return response;
+        return res.status(200).json(Array.from(locations));
       }
   
       if (locality) {
         const filteredDealers = dealers.filter(record => record.locality === locality);
-        const response = NextResponse.json(filteredDealers,{ status: 200 });
+      //   const response = NextResponse.json(filteredDealers,{ status: 200 });
     
-        response.headers.set('Access-Control-Allow-Origin', '*');
-      response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-      response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-      return response;
+      //   response.headers.set('Access-Control-Allow-Origin', '*');
+      // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+      // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+      // return response;
+        return res.status(200).json(filteredDealers);
       }
-      const response = NextResponse.json({ error: 'Missing required query parameters' }, { status: 400 });
-      response.headers.set('Access-Control-Allow-Origin', '*');
-      response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-      response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-      return response;
+      // const response = NextResponse.json({ error: 'Missing required query parameters' }, { status: 400 });
+      // response.headers.set('Access-Control-Allow-Origin', '*');
+      // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+      // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+      // return response;
+      return res.status(400).json({ error: 'Missing required query parameters' });
     } catch (error) {
       console.error("Server error:", error);
-    const response = NextResponse.json({ error: 'Server error' }, { status: 500 });
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-    return response;
+    // const response = NextResponse.json({ error: 'Server error' }, { status: 500 });
+    // response.headers.set('Access-Control-Allow-Origin', '*');
+    // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    // return response;
+      return res.status(500).json({ error: 'Server error' });
    }
   }
 
