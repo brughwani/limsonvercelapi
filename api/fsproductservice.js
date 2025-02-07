@@ -4,20 +4,35 @@ import fs from 'fs';
 import path from 'path';
 const withAuth = require('./middleware/withAuth');
 
-
-
-
 if (!admin.apps.length) {
-  const serviceAccount = {
-    projectId: process.env.project_id,
-    privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'), // Handle newlines
-    clientEmail: process.env.client_email,
-  };
-
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  try {
+    const serviceAccount = {
+      projectId: process.env.project_id,
+      privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'),
+      clientEmail: process.env.client_email,
+    };
+    
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  } catch (error) {
+    console.error("Firebase Admin Initialization Error:", error);
+  }
 }
+
+
+
+// if (!admin.apps.length) {
+//   const serviceAccount = {
+//     projectId: process.env.project_id,
+//     privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'), // Handle newlines
+//     clientEmail: process.env.client_email,
+//   };
+
+//   admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//   });
+// }
   const firestore = admin.firestore();
 
 // module.exports = async (req, res) => {
@@ -107,6 +122,14 @@ if (!admin.apps.length) {
 // }
 
 const handler = async (req, res) => {
+
+  if (req.method === 'OPTIONS') {
+    const response = NextResponse.json({}, { status: 200 });
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+    return response;
+}
     // res.setHeader('Access-Control-Allow-Origin', '*');
     // res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
     // res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -133,7 +156,7 @@ const url1 = new URL(req.url, baseurl);
 
   try {
     let products;
-   products = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
+   products = JSON.parse(await fs.promises.readFileSync(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
    
     // if (process.env.ACTIVE_DEPLOYMENT === 'local') {
     //   // Fetch product data from static JSON file
