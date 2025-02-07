@@ -90,7 +90,7 @@ console.log(req.url);
             dealersByLocation[location].push(dealerInfo);
           }
         });
-        const response = NextResponse.json(dealersByLocation);
+        const response = NextResponse.json(dealersByLocation, { status: 200 });
         response.headers.set('Access-Control-Allow-Origin', '*');
         response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
         response.headers.set('Access-Control-Allow-Headers', 'Content-Type');

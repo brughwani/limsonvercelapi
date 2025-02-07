@@ -201,7 +201,7 @@ const url1 = new URL(req.url, baseurl);
         responseObj = productsByBrand;
     }
 
-    const response = NextResponse.json(responseObj);
+    const response = NextResponse.json(responseObj, { status: 200 });
     response.headers.set('Access-Control-Allow-Origin', '*');
     response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
     response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
