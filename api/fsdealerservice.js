@@ -55,8 +55,8 @@ console.log("searchParams",url1.searchParams);
   
     try {
       // Fetch dealer data from static JSON file
-      const dealers = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'Dealer.json'), 'utf8'));
-  
+   //   const dealers = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'Dealer.json'), 'utf8'));
+   const dealers = JSON.parse(await fs.promises.readFile(path.join(process.cwd(), 'public', 'Dealer.json'), 'utf8'));
       if (getAllDealers === 'true') {
         const dealersByLocation = {};
         
