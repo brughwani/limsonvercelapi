@@ -156,7 +156,7 @@ const url1 = new URL(req.url, baseurl);
 
   try {
     let products;
-   products = JSON.parse(await fs.promises.readFileSync(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
+   products = JSON.parse(await fs.promises.readFile(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
    
     // if (process.env.ACTIVE_DEPLOYMENT === 'local') {
     //   // Fetch product data from static JSON file
