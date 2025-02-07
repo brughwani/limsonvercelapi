@@ -92,7 +92,7 @@ console.log("searchParams",url1.searchParams);
             locations.add(location);
           }
         });
-        const response = NextResponse.json(Array.from(locations));
+        const response = NextResponse.json(Array.from(locations), { status: 200 });
         response.headers.set('Access-Control-Allow-Origin', '*');
         response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
         response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
