@@ -120,13 +120,16 @@ const handler = async (req, res) => {
     //   return;
     // }
   
+const baseurl='https://limsonvercelapi2.vercel.app';
+const url1 = new URL(req.url, baseurl);
+    
 
-  console.log("req.url", req.NextUrl);
-  const { searchParams } = new URL(req.NextUrl);
+  // console.log("req.url", req.NextUrl);
+  // const { searchParams } = new URL(req.NextUrl);
 // const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
-  const level = searchParams.get('level');
-  const brand = searchParams.get('brand');
-  const category = searchParams.get('category');
+  const level = url1.searchParams.get('level');
+  const brand = url1.searchParams.get('brand');
+  const category = url1.searchParams.get('category');
 
   try {
     let products;
