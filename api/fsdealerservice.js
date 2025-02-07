@@ -192,7 +192,7 @@ console.log("searchParams",url1.searchParams);
   
       if (locality) {
         const filteredDealers = dealers.filter(record => record.locality === locality);
-        const response = NextResponse.json(filteredDealers);
+        const response = NextResponse.json(filteredDealers,{ status: 200 });
     
         response.headers.set('Access-Control-Allow-Origin', '*');
       response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
