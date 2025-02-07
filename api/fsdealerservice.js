@@ -139,7 +139,7 @@ const url1 = new URL(req.url, baseurl);
 console.log(req.url);
 
 //const searchParams = req.url ? req.url.searchParams : new URL(req.url).searchParams;
-console.log("searchParams",searchParams);
+console.log("searchParams",url1.searchParams);
     const locality = url1.searchParams.get('locality');
     const getLocations = url1.searchParams.get('getLocations');
     const getAllDealers = url1.searchParams.get('getAllDealers');
