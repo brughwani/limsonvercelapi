@@ -60,18 +60,14 @@ const baseurl='https://limsonvercelapi2.vercel.app';
 const url1 = new URL(req.url, baseurl);
     
    
-//console.log(req.url);
 
-//const searchParams = req.url ? req.url.searchParams : new URL(req.url).searchParams;
-//console.log("searchParams",url1.searchParams);
     const locality = url1.searchParams.get('locality');
     const getLocations = url1.searchParams.get('getLocations');
     const getAllDealers = url1.searchParams.get('getAllDealers');
   
     try {
       // Fetch dealer data from static JSON file
-   //   const dealers = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'Dealer.json'), 'utf8'));
-   const dealers = JSON.parse(await fs.promises.readFile(path.join(process.cwd(), 'public', 'Dealer.json'), 'utf8'));
+  const dealers = JSON.parse(await fs.promises.readFile(path.join(process.cwd(), 'public', 'Dealer.json'), 'utf8'));
       if (getAllDealers === 'true') {
         const dealersByLocation = {};
         
@@ -91,11 +87,7 @@ const url1 = new URL(req.url, baseurl);
             dealersByLocation[location].push(dealerInfo);
           }
         });
-        // const response = NextResponse.json(dealersByLocation, { status: 200 });
-        // response.headers.set('Access-Control-Allow-Origin', '*');
-        // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-        // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-        // return response;
+      
         return res.status(200).json(dealersByLocation);
 
       }
@@ -109,61 +101,23 @@ const url1 = new URL(req.url, baseurl);
             locations.add(location);
           }
         });
-        // const response = NextResponse.json(Array.from(locations), { status: 200 });
-        // response.headers.set('Access-Control-Allow-Origin', '*');
-        // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-        // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-        // return response;
+        
         return res.status(200).json(Array.from(locations));
       }
   
       if (locality) {
         const filteredDealers = dealers.filter(record => record.locality === locality);
-      //   const response = NextResponse.json(filteredDealers,{ status: 200 });
-    
-      //   response.headers.set('Access-Control-Allow-Origin', '*');
-      // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-      // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-      // return response;
+   
         return res.status(200).json(filteredDealers);
       }
-      // const response = NextResponse.json({ error: 'Missing required query parameters' }, { status: 400 });
-      // response.headers.set('Access-Control-Allow-Origin', '*');
-      // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-      // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-      // return response;
+   
       return res.status(400).json({ error: 'Missing required query parameters' });
     } catch (error) {
       console.error("Server error:", error);
-    // const response = NextResponse.json({ error: 'Server error' }, { status: 500 });
-    // response.headers.set('Access-Control-Allow-Origin', '*');
-    // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-    // return response;
+  
       return res.status(500).json({ error: 'Server error' });
    }
   }
 
-  // export async function OPTIONS(req) {
-  //   const response = NextResponse.json({});
-  //   response.headers.set('Access-Control-Allow-Origin', '*');
-  //   response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  //   response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-  //   return response;
-  // }
-
-  // Options handler called explicitly if need be
-// function handleOptions() {
-//   const response = NextResponse.json({},200);
-//   response.headers.set('Access-Control-Allow-Origin', '*');
-//   response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-//   response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-//   return response;
-// }
-
-// // This is the exported Options function so that Next.js recognizes it
-// export async function OPTIONS(req) {
-//   return handleOptions();
-// }
-
+ 
   module.exports = withAuth(handler);
