@@ -33,7 +33,7 @@ async function getCurrentRecordDetails(recordIds) {
 
     return records.docs.map(doc => ({
       recordId: doc.id,
-      currentStatus: doc.data().status || null,
+      currentStatus: doc.data()['Status'] || null,
       currentAllotment: doc.data()['allotted to'] || null
     }));
   } catch (error) {
