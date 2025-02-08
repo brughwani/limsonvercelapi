@@ -25,7 +25,7 @@ async function getCurrentRecordDetails(recordIds) {
 
     const recordIdsArray = Array.isArray(recordIds) ? recordIds : recordIds.split(',');
 
-    const records = await firestore.collection('admin').where('__name__', 'in', recordIdsArray).get();
+    const records = await firestore.collection('Admin').where('__name__', 'in', recordIdsArray).get();
 
     if (records.empty) {
       throw new Error('No records found');
@@ -76,7 +76,7 @@ const handler = async (req, res) => {
 console.log(updates)
 
 
-      const docRef = firestore.collection('admin').doc(updates.id);
+      const docRef = firestore.collection('Admin').doc(updates.id);
       await docRef.update(updates.fields);
 
       return res.status(200).json({
