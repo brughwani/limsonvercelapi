@@ -127,20 +127,12 @@ const handler = async (req, res) => {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
-      // const response = NextResponse.json({}, { status: 200 });
-      // response.headers.set('Access-Control-Allow-Origin', '*');
-      // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-      // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-      // return response;
+     
       return res.status(200).end();
       
   }
    
-    //   if (req.method === 'OPTIONS') {
-    //   res.status(200).end();
-    //   return;
-    // }
-  
+   
     if (req.method !== 'GET') {
       res.status(405).send('Method Not Allowed');
       return;
@@ -150,9 +142,6 @@ const baseurl='https://limsonvercelapi2.vercel.app';
 const url1 = new URL(req.url, baseurl);
     
 
-  // console.log("req.url", req.NextUrl);
-  // const { searchParams } = new URL(req.NextUrl);
-// const { searchParams } = new URL("https://limsonvercelapi2.vercel.app"+req.url);
   const level = url1.searchParams.get('level');
   const brand = url1.searchParams.get('brand');
   const category = url1.searchParams.get('category');
@@ -161,14 +150,7 @@ const url1 = new URL(req.url, baseurl);
     let products;
    products = JSON.parse(await fs.promises.readFile(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
    
-    // if (process.env.ACTIVE_DEPLOYMENT === 'local') {
-    //   // Fetch product data from static JSON file
-    //   products = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'public', 'products.json'), 'utf8'));
-    // } else {
-    //   // Fetch product data from Firestore
-    //   const snapshot = await firestore.collection('Products').get();
-    //   products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    // }
+  
 
     const productsByBrand = {};
     let responseObj = {};
@@ -204,27 +186,12 @@ const url1 = new URL(req.url, baseurl);
         responseObj = productsByBrand;
     }
 
-    // const response = NextResponse.json(responseObj, { status: 200 });
-    // response.headers.set('Access-Control-Allow-Origin', '*');
-    // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-    // return response;
     return res.status(200).json(responseObj);
   } catch (error) {
     console.error("Server error:", error);
-    // const response = NextResponse.json({ error: 'Server error' }, { status: 500 });
-    // response.headers.set('Access-Control-Allow-Origin', '*');
-    // response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-    // response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-    // return response;
+
     return res.status(500).json({ error: 'Server error' });
   }
 }
-// export async function OPTIONS(req) {
-//   const response = NextResponse.json({});
-//   response.headers.set('Access-Control-Allow-Origin', '*');
-//   response.headers.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
-//   response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
-//   return response;
-// }
+
 module.exports = withAuth(handler);

@@ -33,7 +33,7 @@ const handler = async (req, res) => {
     }
   
     try {
-      const adminRecords = await firestore.collection('admin').get();
+      const adminRecords = await firestore.collection('Admin').get();
   
       const retrievedRecords = adminRecords.docs.map(doc => ({
         id: doc.id,
