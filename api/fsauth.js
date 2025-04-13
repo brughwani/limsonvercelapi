@@ -75,7 +75,7 @@ console.log(userSnapshot1);
     // Fetch user by phone number
     const userSnapshot = await firestore.collection('Employee').where('Phone', '==', trimmedPhone).get();
 console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users found
-    console.log(`Found ${userSnapshot.size} user(s)`); // Log the number of users found
+   // console.log(`Found ${userSnapshot.size} user(s)`); // Log the number of users found
 
 
     if (userSnapshot.empty) {
