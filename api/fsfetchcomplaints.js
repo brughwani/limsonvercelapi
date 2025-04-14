@@ -39,6 +39,26 @@ const handler = async (req, res) => {
         id: doc.id,
         fields: doc.data()
       }));
+    //  const fields = { ...data.fields };
+
+    console.log(retrievedRecords);
+
+      // Convert Firestore timestamps to YYYY-MM-DD format
+      if (fields['warranty expiry date']) {
+        const timestamp = fields['warranty expiry date'];
+        if (timestamp._seconds) {
+          const date = new Date(timestamp._seconds * 1000);
+          fields['warranty expiry date'] = date.toISOString().split('T')[0];
+        }
+      }
+
+      if (fields['Purchase date']) {
+        const timestamp = fields['Purchase date'];
+        if (timestamp._seconds) {
+          const date = new Date(timestamp._seconds * 1000);
+          fields['Purchase date'] = date.toISOString().split('T')[0];
+        }
+      }
   
       if (retrievedRecords.length > 0) {
         res.status(200).json(retrievedRecords);
