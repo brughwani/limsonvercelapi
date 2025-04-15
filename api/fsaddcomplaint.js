@@ -47,7 +47,7 @@ const handler = async (req, res) => {
   try {
     const currentDate = new Date();
     const data = {
-      "Customer Name": req.body.fields['Customer Name'],
+      "Customer name": req.body.fields['Customer name'],
       "Phone": req.body.fields['Phone'],
       "address": req.body.fields['address'],
       "pincode": req.body.fields['pincode'],
