@@ -2,7 +2,7 @@ import cors from 'cors';
 
 const corsOptions = {
   origin: '*', // Allow all origins. Adjust this as needed for security.
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS','PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
