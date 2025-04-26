@@ -1,13 +1,53 @@
+const admin = require('firebase-admin');
+const withAuth = require('./middleware/withAuth');
+
+
+if (!admin.apps.length) {
+  const serviceAccount = {
+    projectId: process.env.project_id,
+    privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'), // Handle newlines
+    clientEmail: process.env.client_email,
+  };
+
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+  const firestore = admin.firestore();
+
 
 
 const handler = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    
+    const technicianName = req.query.technicianName || (req.user && req.user.name);
+  if (!technicianName) {
+    return res.status(400).json({ error: 'name required' });
+  }
     if (req.method === 'OPTIONS') {
       res.status(200).end();
       return;
     }
+    if (req.method === 'GET') {
+        try {
+          const snapshot = await firestore
+            .collection('Admin')
+            .where('allotted to', '==', technicianName)
+            .get();
+    
+          const complaints = [];
+          snapshot.forEach(doc => {
+            complaints.push({ id: doc.id, ...doc.data() });
+          });
+    
+          return res.status(200).json({ success: true, complaints });
+        } catch (error) {
+          console.error('Error fetching complaints:', error);
+          return res.status(500).json({ error: error.message });
+        }
+      }
   
     if (req.method === 'PATCH') {
       try {
