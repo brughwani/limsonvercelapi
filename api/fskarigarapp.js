@@ -22,13 +22,14 @@ const handler = async (req, res) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
-    const technicianName = req.query.technicianName || (req.user && req.user.name);
-  if (!technicianName) {
-    return res.status(400).json({ error: 'name required' });
-  }
+   
     if (req.method === 'OPTIONS') {
       res.status(200).end();
       return;
+    }
+    const technicianName = req.query.technicianName || (req.user && req.user.name);
+    if (!technicianName) {
+      return res.status(400).json({ error: 'name required' });
     }
     if (req.method === 'GET') {
         try {
