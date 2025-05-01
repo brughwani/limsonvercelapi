@@ -115,11 +115,11 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
   console.log(userData)
 
   console.log('Role:', role);
-  console.log('name:', userData['fields']["First name"]);
+  console.log('name:', userData["First name"]);
 
   
 
-    return res.status(200).json({ token: idToken, role: role,user:{name: userData['fields']["First name"],} });
+    return res.status(200).json({ token: idToken, role: role,user:{name: userData["First name"],} });
   } catch (error) {
     console.error('Error signing in:', error);
     return res.status(500).json({ error: 'Server error' });
