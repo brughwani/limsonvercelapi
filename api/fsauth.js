@@ -113,9 +113,12 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
   // });
   const idToken = await getIdToken(email,password);
 
+  console.log('Role:', role);
+  console.log('name:', userData['fields']["First name"]);
+
   
 
-    return res.status(200).json({ token: idToken, role: userData.role });
+    return res.status(200).json({ token: idToken, role: role,user:{name: userData['fields']["First name"],} });
   } catch (error) {
     console.error('Error signing in:', error);
     return res.status(500).json({ error: 'Server error' });
