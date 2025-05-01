@@ -112,6 +112,7 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
   //   returnSecureToken: true
   // });
   const idToken = await getIdToken(email,password);
+  console.log(userData)
 
   console.log('Role:', role);
   console.log('name:', userData['fields']["First name"]);
