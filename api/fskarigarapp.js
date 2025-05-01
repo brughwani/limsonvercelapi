@@ -37,11 +37,15 @@ const handler = async (req, res) => {
             .collection('Admin')
             .where('allotted to', '==', technicianName)
             .get();
+
+            console.log('Snapshot:', snapshot);
+            
     
           const complaints = [];
           snapshot.forEach(doc => {
             complaints.push({ id: doc.id, ...doc.data() });
           });
+          console.log('Complaints:', complaints);
     
           return res.status(200).json({ success: true, complaints });
         } catch (error) {
