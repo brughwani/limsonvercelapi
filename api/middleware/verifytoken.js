@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const withAuth = require('./withAuth');
 const NodeCache = require('node-cache');
+const jwt = require('jsonwebtoken');
 import corsMiddleware from './cors';
 const tokenCache = new NodeCache(); // No default TTL, we'll set it dynamically
 
@@ -22,6 +23,8 @@ if (!admin.apps.length) {
   corsMiddleware(req, res, async () => {
   const authHeader = req.headers.authorization;
 
+  
+
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
@@ -36,7 +39,10 @@ if (!admin.apps.length) {
     }
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // your secret from signing step
+     
+
+   // const decodedToken = await admin.auth().verifyIdToken(token);
     req.user = decodedToken;
     const expiresIn = decodedToken.exp * 1000 - Date.now();
     if (expiresIn > 0) {
