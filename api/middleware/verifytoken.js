@@ -39,10 +39,10 @@ if (!admin.apps.length) {
     }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // your secret from signing step
+  //  const decodedToken = jwt.verify(token, process.env.JWT_SECRET); // your secret from signing step
      
 
-   // const decodedToken = await admin.auth().verifyIdToken(token);
+   const decodedToken = await admin.auth().verifyIdToken(token);
     req.user = decodedToken;
     const expiresIn = decodedToken.exp * 1000 - Date.now();
     if (expiresIn > 0) {
