@@ -32,6 +32,8 @@ const handler = async (req, res) => {
       return res.status(400).json({ error: 'name required' });
     }
     if (req.method === 'GET') {
+      console.log('User:', req.user);
+      console.log('Technician name:', technicianName);
         try {
           const snapshot = await firestore
             .collection('Admin')
