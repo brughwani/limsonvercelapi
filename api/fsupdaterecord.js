@@ -70,6 +70,7 @@ const handler = async (req, res) => {
   if (req.method === 'PATCH') {
     try {
       const updates = req.body;
+      console.log("updates",updates)
       if (!updates.id || !updates.fields) {
         return res.status(400).json({ error: 'Invalid update format' });
       }
