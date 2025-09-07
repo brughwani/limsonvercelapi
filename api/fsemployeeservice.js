@@ -123,7 +123,7 @@ const handler = async (req, res) => {
           return res.status(400).json({ message: 'No fields selected' });
         }
 
-        const records = await firestore.collection('Employee').select(selectedFields).get();
+        const records = await firestore.collection('Employee').select(...selectedFields).get();
 
         const employeesWithSelectedFields = records.docs.map(doc => {
           const selectedData = {};
