@@ -82,51 +82,78 @@ const handler = async (req, res) => {
   }
 
   if (req.method === 'GET') {
-    try {
-      const { filterField, filterValue, getKarigars, fields } = req.query;
+  try {
+    const { filterField, filterValue, getKarigars, fields } = req.query;
+    console.log('GET request received');
+    console.log('Query parameters:', req.query);
 
-      if (getKarigars === 'true') {
-        const employees = await firestore.collection('Employee').where('Role', '==', 'Karigar').get();
-        console.log('GET request received');
-console.log('Query parameters:', req.query);
-console.log('Headers:', req.headers);
+    if (getKarigars === 'true') {
+      const employees = await firestore.collection('Employee').where('Role', '==', 'Karigar').get();
+      
+      const result = employees.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-        const result = employees.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
+      return res.status(200).json(result);
+    }
 
-        return res.status(200).json(result);
+    if (filterField && filterValue) {
+      const validFields = ['Phone', 'empcode', 'name'];
+      if (!validFields.includes(filterField)) {
+        return res.status(400).json({ error: 'Invalid filtering field. Allowed fields are: ' + validFields.join(', ') });
       }
 
-      if (filterField && filterValue) {
-        const validFields = ['Phone', 'empcode', 'name'];
-        if (!validFields.includes(filterField)) {
-          return res.status(400).json({ error: 'Invalid filtering field. Allowed fields are: ' + validFields.join(', ') });
-        }
+      const records = await firestore.collection('Employee').where(filterField, '==', filterValue).get();
 
-        const records = await firestore.collection('Employee').where(filterField, '==', filterValue).get();
+      const retrievedRecords = records.docs.map(doc => ({
+        id: doc.id,
+        empcode: doc.data().empcode,
+        Phone: doc.data().Phone
+      }));
 
-        const retrievedRecords = records.docs.map(doc => ({
-          id: doc.id,
-          empcode: doc.data().empcode,
-          Phone: doc.data().Phone
-        }));
-
-        if (retrievedRecords.length > 0) {
-          return res.status(200).json(retrievedRecords);
-        }
-        return res.status(404).json({ message: 'No records found for that filter' });
+      if (retrievedRecords.length > 0) {
+        return res.status(200).json(retrievedRecords);
       }
+      return res.status(404).json({ message: 'No records found for that filter' });
+    }
 
-      if (fields) {
-        let selectedFields = Array.isArray(fields) ? fields : fields.split(',').map(field => field.trim().replace(/[\[\]"']/g, ''));
-
-        if (!selectedFields || selectedFields.length === 0) {
+    if (fields) {
+      console.log('Raw fields parameter:', fields);
+      
+      let selectedFields = [];
+      
+      try {
+        // Parse the fields parameter
+        if (Array.isArray(fields)) {
+          selectedFields = fields;
+        } else if (typeof fields === 'string') {
+          if (fields.startsWith('[')) {
+            selectedFields = JSON.parse(fields);
+          } else {
+            selectedFields = fields.split(',').map(field => field.trim());
+          }
+        }
+        
+        console.log('Parsed fields:', selectedFields);
+        
+        if (selectedFields.length === 0) {
           return res.status(400).json({ message: 'No fields selected' });
         }
 
-        const records = await firestore.collection('Employee').select(...selectedFields).get();
+        // Convert field names with spaces to FieldPath objects
+        const fieldPaths = selectedFields.map(field => {
+          if (field.includes(' ')) {
+            // For fields with spaces, use FieldPath
+            return new admin.firestore.FieldPath(...field.split(' '));
+          }
+          return field;
+        });
+
+        console.log('Field paths for select:', fieldPaths);
+
+        // Use the field paths in the select query
+        const records = await firestore.collection('Employee').select(...fieldPaths).get();
 
         const employeesWithSelectedFields = records.docs.map(doc => {
           const selectedData = {};
@@ -143,17 +170,99 @@ console.log('Headers:', req.headers);
           return res.status(200).json(employeesWithSelectedFields);
         }
         return res.status(404).json({ message: 'No employee records found' });
+        
+      } catch (error) {
+        console.error('Field processing error:', error);
+        return res.status(400).json({ 
+          error: 'Invalid fields format', 
+          details: error.message 
+        });
       }
-
-      return res.status(400).json({ error: 'Missing required query parameters. Use one of: getKarigars, filterField+filterValue, or fields' });
-
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Server error' });
     }
+
+    // If no valid query parameters are provided
+    return res.status(400).json({ 
+      error: 'Missing required query parameters. Use one of: getKarigars, filterField+filterValue, or fields' 
+    });
+
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
   }
+}
+
 
   return res.status(405).send('Method Not Allowed');
 };
 
 module.exports = withAuth(handler);
+
+
+  // if (req.method === 'GET') {
+  //   try {
+  //     const { filterField, filterValue, getKarigars, fields } = req.query;
+
+  //     if (getKarigars === 'true') {
+  //       const employees = await firestore.collection('Employee').where('Role', '==', 'Karigar').get();
+
+  //       const result = employees.docs.map(doc => ({
+  //         id: doc.id,
+  //         ...doc.data()
+  //       }));
+
+  //       return res.status(200).json(result);
+  //     }
+
+  //     if (filterField && filterValue) {
+  //       const validFields = ['Phone', 'empcode', 'name'];
+  //       if (!validFields.includes(filterField)) {
+  //         return res.status(400).json({ error: 'Invalid filtering field. Allowed fields are: ' + validFields.join(', ') });
+  //       }
+
+  //       const records = await firestore.collection('Employee').where(filterField, '==', filterValue).get();
+
+  //       const retrievedRecords = records.docs.map(doc => ({
+  //         id: doc.id,
+  //         empcode: doc.data().empcode,
+  //         Phone: doc.data().Phone
+  //       }));
+
+  //       if (retrievedRecords.length > 0) {
+  //         return res.status(200).json(retrievedRecords);
+  //       }
+  //       return res.status(404).json({ message: 'No records found for that filter' });
+  //     }
+
+  //     if (fields) {
+  //       let selectedFields = Array.isArray(fields) ? fields : fields.split(',').map(field => field.trim().replace(/[\[\]"']/g, ''));
+
+  //       if (!selectedFields || selectedFields.length === 0) {
+  //         return res.status(400).json({ message: 'No fields selected' });
+  //       }
+
+  //       const records = await firestore.collection('Employee').select(...selectedFields).get();
+
+  //       const employeesWithSelectedFields = records.docs.map(doc => {
+  //         const selectedData = {};
+  //         selectedFields.forEach(field => {
+  //           selectedData[field] = doc.data()[field];
+  //         });
+  //         return {
+  //           id: doc.id,
+  //           ...selectedData,
+  //         };
+  //       });
+
+  //       if (employeesWithSelectedFields.length > 0) {
+  //         return res.status(200).json(employeesWithSelectedFields);
+  //       }
+  //       return res.status(404).json({ message: 'No employee records found' });
+  //     }
+
+  //     return res.status(400).json({ error: 'Missing required query parameters. Use one of: getKarigars, filterField+filterValue, or fields' });
+
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ error: 'Server error' });
+  //   }
+  // }
