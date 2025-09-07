@@ -87,6 +87,9 @@ const handler = async (req, res) => {
 
       if (getKarigars === 'true') {
         const employees = await firestore.collection('Employee').where('Role', '==', 'Karigar').get();
+        console.log('GET request received');
+console.log('Query parameters:', req.query);
+console.log('Headers:', req.headers);
 
         const result = employees.docs.map(doc => ({
           id: doc.id,
