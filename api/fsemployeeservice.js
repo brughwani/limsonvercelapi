@@ -118,82 +118,76 @@ const handler = async (req, res) => {
     //   return res.status(404).json({ message: 'No records found for that filter' });
     // }
 
-    if (fields) {
-      console.log('Raw fields parameter:', fields);
-      
-      let selectedFields = [];
-      
-      try {
-        // Parse the fields parameter
-        if (Array.isArray(fields)) {
-          selectedFields = fields;
-        } else if (typeof fields === 'string') {
-          if (fields.startsWith('[')) {
-            selectedFields = JSON.parse(fields);
-          } else {
-            selectedFields = fields.split(',').map(field => field.trim());
-          }
-        }
-        
-        console.log('Parsed fields:', selectedFields);
-        
-        if (selectedFields.length === 0) {
-          return res.status(400).json({ message: 'No fields selected' });
-        }
-
-        // Convert field names with spaces to FieldPath objects
-        const fieldPaths = selectedFields.map(field => {
-          if (field.includes(' ')) {
-            // For fields with spaces, use FieldPath
-            return new admin.firestore.FieldPath(...field.split(' '));
-          }
-          return field;
-        });
-
-        console.log('Field paths for select:', fieldPaths);
-
-        // Use the field paths in the select query
-        const records = await firestore.collection('Employee').select(...fieldPaths).get();
-
-        const employeesWithSelectedFields = records.docs.map(doc => {
-          const selectedData = {};
-          selectedFields.forEach(field => {
-            selectedData[field] = doc.data()[field];
-          });
-          return {
-            id: doc.id,
-            ...selectedData,
-          };
-        });
-
-        if (employeesWithSelectedFields.length > 0) {
-          return res.status(200).json(employeesWithSelectedFields);
-        }
-        return res.status(404).json({ message: 'No employee records found' });
-        
-      } catch (error) {
-        console.error('Field processing error:', error);
-        return res.status(400).json({ 
-          error: 'Invalid fields format', 
-          details: error.message 
-        });
+if (fields) {
+  console.log('Raw fields parameter:', fields);
+  
+  let selectedFields = [];
+  
+  try {
+    // Parse the fields parameter
+    if (Array.isArray(fields)) {
+      selectedFields = fields;
+    } else if (typeof fields === 'string') {
+      if (fields.startsWith('[')) {
+        selectedFields = JSON.parse(fields);
+      } else {
+        selectedFields = fields.split(',').map(field => field.trim());
       }
     }
+    
+    console.log('Parsed fields:', selectedFields);
+    
+    if (selectedFields.length === 0) {
+      return res.status(400).json({ message: 'No fields selected' });
+    }
 
-    // If no valid query parameters are provided
-    return res.status(400).json({ 
-      error: 'Missing required query parameters. Use one of: getKarigars, filterField+filterValue, or fields' 
+    // MANUAL APPROACH: Get all documents and filter fields manually
+    const records = await firestore.collection('Employee').get();
+    console.log('Total records found:', records.size);
+
+    const employeesWithSelectedFields = records.docs.map(doc => {
+      const docData = doc.data();
+      const selectedData = {};
+      
+      selectedFields.forEach(field => {
+        // Handle field names with spaces - they exist as-is in the document
+        selectedData[field] = docData[field];
+      });
+      
+      return {
+        id: doc.id,
+        ...selectedData,
+      };
+    }).filter(employee => {
+      // Filter out empty documents if needed
+      return Object.keys(employee).length > 1; // At least one field besides id
     });
 
+    console.log('Filtered employees count:', employeesWithSelectedFields.length);
+
+    if (employeesWithSelectedFields.length > 0) {
+      return res.status(200).json(employeesWithSelectedFields);
+    }
+    return res.status(404).json({ message: 'No employee records found' });
   } catch (error) {
-    console.error('Server error:', error);
-    res.status(500).json({ error: 'Server error: ' + error.message });
+    console.error('Error parsing fields parameter:', error);
+    return res.status(400).json({ message: 'Invalid fields parameter' });
   }
 }
 
+    // If no valid query parameters are provided
+  //   return res.status(400).json({ 
+  //     error: 'Missing required query parameters. Use one of: getKarigars, filterField+filterValue, or fields' 
+  //   });
 
-  return res.status(405).send('Method Not Allowed');
-};
+  // } catch (error) {
+  //   console.error('Server error:', error);
+  //   res.status(500).json({ error: 'Server error: ' + error.message });
+  // }
+
+
+
+
 
 module.exports = withAuth(handler);
 
