@@ -174,6 +174,15 @@ if (fields) {
     return res.status(400).json({ message: 'Invalid fields parameter' });
   }
 }
+  }
+  catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error: ' + error.message });
+  }
+}
+
+  res.status(405).json({ error: 'Method not allowed' });
+}
 
     // If no valid query parameters are provided
   //   return res.status(400).json({ 
