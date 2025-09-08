@@ -99,7 +99,7 @@ const handler = async (req, res) => {
     }
 
     if (filterField && filterValue) {
-      const validFields = ['Phone', 'empcode', 'name'];
+      const validFields = ['Phone', 'empcode', 'First name','Last name', 'Role', 'address', 'personal phone number', 'salary'];
       if (!validFields.includes(filterField)) {
         return res.status(400).json({ error: 'Invalid filtering field. Allowed fields are: ' + validFields.join(', ') });
       }
