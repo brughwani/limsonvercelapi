@@ -98,25 +98,25 @@ const handler = async (req, res) => {
       return res.status(200).json(result);
     }
 
-    if (filterField && filterValue) {
-      const validFields = ['Phone', 'empcode', 'First name','Last name', 'Role', 'address', 'personal phone number', 'salary'];
-      if (!validFields.includes(filterField)) {
-        return res.status(400).json({ error: 'Invalid filtering field. Allowed fields are: ' + validFields.join(', ') });
-      }
+    // if (filterField && filterValue) {
+    //   const validFields = ['Phone', 'empcode', 'First name','Last name', 'Role', 'address', 'personal phone number', 'salary'];
+    //   if (!validFields.includes(filterField)) {
+    //     return res.status(400).json({ error: 'Invalid filtering field. Allowed fields are: ' + validFields.join(', ') });
+    //   }
 
-      const records = await firestore.collection('Employee').where(filterField, '==', filterValue).get();
+    //   const records = await firestore.collection('Employee').where(filterField, '==', filterValue).get();
 
-      const retrievedRecords = records.docs.map(doc => ({
-        id: doc.id,
-        empcode: doc.data().empcode,
-        Phone: doc.data().Phone
-      }));
+    //   const retrievedRecords = records.docs.map(doc => ({
+    //     id: doc.id,
+    //     empcode: doc.data().empcode,
+    //     Phone: doc.data().Phone
+    //   }));
 
-      if (retrievedRecords.length > 0) {
-        return res.status(200).json(retrievedRecords);
-      }
-      return res.status(404).json({ message: 'No records found for that filter' });
-    }
+    //   if (retrievedRecords.length > 0) {
+    //     return res.status(200).json(retrievedRecords);
+    //   }
+    //   return res.status(404).json({ message: 'No records found for that filter' });
+    // }
 
     if (fields) {
       console.log('Raw fields parameter:', fields);
