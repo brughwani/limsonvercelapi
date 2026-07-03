@@ -1,6 +1,18 @@
 const { Firestore } = require('firestore');
-//const withAuth = require('./withAuth');
 const withAuth = require('./middleware/withAuth');
+const axios = require('axios');
+
+function normalizePhoneNumber(phone) {
+  // Remove all non-digit characters
+  let cleaned = String(phone || '').replace(/\D/g, '');
+  
+  // If it's a 10 digit number, prepend '91' (assuming India as default)
+  if (cleaned.length === 10) {
+    cleaned = '91' + cleaned;
+  }
+  
+  return cleaned;
+}
 
 
 
@@ -68,6 +80,65 @@ const handler = async (req, res) => {
     const docRef = await firestore.collection('Admin').add(data);
 
     console.log('Document written with ID:', docRef.id);
+
+    // Send WhatsApp notification
+    const customerPhone = data['Phone'];
+    const customerName = data['Customer name'];
+    
+    if (customerPhone) {
+      const WHATSAPP_ACCESS_TOKEN = process.env.access_token || process.env.ACCESS_TOKEN || process.env.WHATSAPP_ACCESS_TOKEN;
+      const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID || '1575309460840542';
+      
+      if (!WHATSAPP_ACCESS_TOKEN) {
+        console.warn('WhatsApp access token is not configured (checked process.env.access_token, process.env.ACCESS_TOKEN, process.env.WHATSAPP_ACCESS_TOKEN).');
+      } else {
+        try {
+          const normalizedPhone = normalizePhoneNumber(customerPhone);
+          const name = customerName || 'Customer';
+          
+          console.log(`Sending WhatsApp notification to ${normalizedPhone} (Name: ${name})...`);
+          
+          const whatsappResponse = await axios.post(
+            `https://graph.facebook.com/v20.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`,
+            {
+              messaging_product: 'whatsapp',
+              recipient_type: 'individual',
+              to: normalizedPhone,
+              type: 'template',
+              template: {
+                name: 'complaint_registration',
+                language: {
+                  code: 'en'
+                },
+                components: [
+                  {
+                    type: 'body',
+                    parameters: [
+                      {
+                        type: 'text',
+                        text: name
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              headers: {
+                'Authorization': `Bearer ${WHATSAPP_ACCESS_TOKEN}`,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+          
+          console.log('WhatsApp notification sent successfully:', whatsappResponse.data);
+        } catch (waError) {
+          console.error('Failed to send WhatsApp notification:', waError.response?.data || waError.message);
+        }
+      }
+    } else {
+      console.warn('No Phone field provided, skipping WhatsApp notification.');
+    }
 
     return res.status(200).json({
       message: 'Complaint added successfully',
