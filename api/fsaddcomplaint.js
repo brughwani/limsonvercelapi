@@ -6,6 +6,11 @@ function normalizePhoneNumber(phone) {
   // Remove all non-digit characters
   let cleaned = String(phone || '').replace(/\D/g, '');
   
+  // Strip leading 0 if present
+  if (cleaned.startsWith('0')) {
+    cleaned = cleaned.substring(1);
+  }
+  
   // If it's a 10 digit number, prepend '91' (assuming India as default)
   if (cleaned.length === 10) {
     cleaned = '91' + cleaned;
