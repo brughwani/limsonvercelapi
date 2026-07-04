@@ -86,11 +86,20 @@ const handler = async (req, res) => {
     const customerName = data['Customer name'];
     
     if (customerPhone) {
-      const WHATSAPP_ACCESS_TOKEN = process.env.access_token || process.env.ACCESS_TOKEN || process.env.WHATSAPP_ACCESS_TOKEN;
-      const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID || '1575309460840542';
+      const WHATSAPP_ACCESS_TOKEN = 
+        process.env['access token'] || 
+        process.env.access_token || 
+        process.env.ACCESS_TOKEN || 
+        process.env.WHATSAPP_ACCESS_TOKEN;
+        
+      const WHATSAPP_PHONE_NUMBER_ID = 
+        process.env['whatsapp phone number id'] || 
+        process.env.whatsapp_phone_number_id || 
+        process.env.WHATSAPP_PHONE_NUMBER_ID || 
+        '1575309460840542';
       
       if (!WHATSAPP_ACCESS_TOKEN) {
-        console.warn('WhatsApp access token is not configured (checked process.env.access_token, process.env.ACCESS_TOKEN, process.env.WHATSAPP_ACCESS_TOKEN).');
+        console.warn('WhatsApp access token is not configured (checked process.env["access token"], process.env.access_token, process.env.ACCESS_TOKEN, process.env.WHATSAPP_ACCESS_TOKEN).');
       } else {
         try {
           const normalizedPhone = normalizePhoneNumber(customerPhone);
