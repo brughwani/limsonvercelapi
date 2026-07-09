@@ -20,7 +20,7 @@ const handler = async (req, res) => {
     const challenge = req.query['hub.challenge'];
 
     if (mode && token) {
-      if (mode === 'subscribe' && token === process.env.META_VERIFY_TOKEN) {
+      if (mode === 'subscribe' && token === process.env.verify_token) {
         console.log('Webhook verified successfully!');
         return res.status(200).send(challenge);
       } else {
