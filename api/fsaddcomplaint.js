@@ -183,7 +183,7 @@ const handler = async (req, res) => {
                 process.env['whatsapp phone number id'] ||
                 process.env.whatsapp_phone_number_id ||
                 process.env.WHATSAPP_PHONE_NUMBER_ID ||
-                '1124450777425852';
+                '1107715999101849';
 
               if (!WHATSAPP_ACCESS_TOKEN) {
                 console.warn('WhatsApp access token is not configured (checked process.env["access token"], process.env.access_token, process.env.ACCESS_TOKEN, process.env.WHATSAPP_ACCESS_TOKEN).');
