@@ -273,6 +273,8 @@ const handler = async (req, res) => {
           } catch (handlerError) {
             console.error('Error adding complaint:', handlerError);
             res.status(500).json({ error: handlerError.message });
+            console.log(error.response?.status);
+            console.log(JSON.stringify(error.response?.data, null, 2));
             resolve();
           }
         });
