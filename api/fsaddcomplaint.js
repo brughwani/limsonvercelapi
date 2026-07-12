@@ -232,6 +232,16 @@ const handler = async (req, res) => {
                         },
                         components: [
                           {
+                            type: 'header',
+                            parameters: [
+                              {
+                                type: 'text',
+                                text: 'Registration'
+                              }
+                            ]
+                          },
+
+                          {
                             type: 'body',
                             parameters: [
                               {
