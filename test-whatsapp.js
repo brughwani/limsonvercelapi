@@ -51,6 +51,21 @@ async function testSend() {
                 {
                   type: 'text',
                   text: 'John Doe'
+                },
+                {
+                  type: 'text',
+                  text: (() => {
+                    const formatToYYYYMMDD = (date) => {
+                      const d = new Date(date);
+                      const year = d.getFullYear();
+                      const month = String(d.getMonth() + 1).padStart(2, '0');
+                      const day = String(d.getDate()).padStart(2, '0');
+                      return `${year}${month}${day}`;
+                    };
+                    const currentDateFormatted = formatToYYYYMMDD(new Date());
+                    const purchaseDateFormatted = formatToYYYYMMDD(new Date('2025-05-10'));
+                    return `${currentDateFormatted}${purchaseDateFormatted}0001`;
+                  })()
                 }
               ]
             }

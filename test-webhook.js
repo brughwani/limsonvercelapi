@@ -12,11 +12,27 @@ process.env.APP_SECRET = 'my_test_app_secret';
 const mockFirestore = {
   collection: (name) => {
     assert.strictEqual(name, 'Admin');
-    return {
+    const query = {
+      where: (field, op, val) => {
+        return query;
+      },
+      count: () => {
+        return {
+          get: async () => {
+            return {
+              data: () => ({ count: 5 })
+            };
+          }
+        };
+      },
       add: async (data) => {
+        assert.ok(data['Complain number'], 'Complain number should be generated');
+        assert.strictEqual(data['Complain number'].length, 20, 'Complain number should be 20 characters long');
+        assert.ok(data['Complain number'].endsWith('0006'), 'Serial number should be 0006 (count 5 + 1)');
         return { id: 'mock_doc_123' };
       }
     };
+    return query;
   }
 };
 

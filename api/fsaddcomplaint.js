@@ -145,6 +145,35 @@ const handler = async (req, res) => {
         verifyToken(req, res, async () => {
           try {
             const currentDate = new Date();
+
+            // Calculate daily serial number starting from 0001
+            const startOfDay = new Date(currentDate);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(currentDate);
+            endOfDay.setHours(23, 59, 59, 999);
+
+            const countSnapshot = await firestore.collection('Admin')
+              .where('date of complain', '>=', startOfDay)
+              .where('date of complain', '<=', endOfDay)
+              .count()
+              .get();
+            const count = countSnapshot.data().count;
+            const serialNumber = String(count + 1).padStart(4, '0');
+
+            const formatToYYYYMMDD = (date) => {
+              if (!date) return '00000000';
+              const d = new Date(date);
+              if (isNaN(d.getTime())) return '00000000';
+              const year = d.getFullYear();
+              const month = String(d.getMonth() + 1).padStart(2, '0');
+              const day = String(d.getDate()).padStart(2, '0');
+              return `${year}${month}${day}`;
+            };
+
+            const currentDateFormatted = formatToYYYYMMDD(currentDate);
+            const purchaseDateFormatted = formatToYYYYMMDD(req.body.fields['Purchase date']);
+            const complainNumber = `${currentDateFormatted}${purchaseDateFormatted}${serialNumber}`;
+
             const data = {
               "Customer name": req.body.fields['Customer name'],
               "Phone": req.body.fields['Phone'],
@@ -158,7 +187,8 @@ const handler = async (req, res) => {
               "warranty expiry date": new Date(req.body.fields['warranty expiry date']).toISOString(),
               "Complain/Remark": req.body.fields['Complain/Remark'],
               "Request Type": req.body.fields['Request Type'],
-              "date of complain": currentDate
+              "date of complain": currentDate,
+              "Complain number": complainNumber
             };
 
             console.log('Data to be inserted:', data);
@@ -192,7 +222,7 @@ const handler = async (req, res) => {
                   const normalizedPhone = normalizePhoneNumber(customerPhone);
                   const name = customerName || 'Customer';
 
-                  console.log(`Sending WhatsApp notification to ${normalizedPhone} (Name: ${name})...`);
+                  console.log(`Sending WhatsApp notification to ${normalizedPhone} (Name: ${name}, Complain Number: ${complainNumber})...`);
 
                   const whatsappResponse = await axios.post(
                     `https://graph.facebook.com/v25.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`,
@@ -213,6 +243,10 @@ const handler = async (req, res) => {
                               {
                                 type: 'text',
                                 text: name
+                              },
+                              {
+                                type: 'text',
+                                text: complainNumber
                               }
                             ]
                           }
