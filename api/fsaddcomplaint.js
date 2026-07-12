@@ -202,7 +202,7 @@ const handler = async (req, res) => {
                       to: normalizedPhone,
                       type: 'template',
                       template: {
-                        name: 'complaint_registration',
+                        name: 'registration_completion',
                         language: {
                           code: 'en'
                         },
