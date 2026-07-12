@@ -226,20 +226,11 @@ const handler = async (req, res) => {
                       to: normalizedPhone,
                       type: 'template',
                       template: {
-                        name: 'registration_completion',
+                        name: 'registration',
                         language: {
                           code: 'en'
                         },
                         components: [
-                          {
-                            type: 'header',
-                            parameters: [
-                              {
-                                type: 'text',
-                                text: 'Registration'
-                              }
-                            ]
-                          },
 
                           {
                             type: 'body',
