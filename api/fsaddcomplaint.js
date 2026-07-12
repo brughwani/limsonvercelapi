@@ -204,15 +204,9 @@ const handler = async (req, res) => {
 
             if (customerPhone) {
               const WHATSAPP_ACCESS_TOKEN =
-                process.env['access token'] ||
-                process.env.access_token ||
-                process.env.ACCESS_TOKEN ||
-                process.env.WHATSAPP_ACCESS_TOKEN;
+                process.env.verify_token
 
               const WHATSAPP_PHONE_NUMBER_ID =
-                process.env['whatsapp phone number id'] ||
-                process.env.whatsapp_phone_number_id ||
-                process.env.WHATSAPP_PHONE_NUMBER_ID ||
                 '1107715999101849';
 
               if (!WHATSAPP_ACCESS_TOKEN) {
