@@ -258,8 +258,8 @@ const handler = async (req, res) => {
 
                   console.log('WhatsApp notification sent successfully:', whatsappResponse.data);
                 } catch (waError) {
-                  console.log(error.response?.status);
-                  console.log(JSON.stringify(error.response?.data, null, 2));
+                  console.log(waError.response?.status);
+                  console.log(JSON.stringify(waError.response?.data, null, 2));
                   console.error('Failed to send WhatsApp notification:', waError.response?.data || waError.message);
                 }
               }
