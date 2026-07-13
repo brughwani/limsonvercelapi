@@ -237,10 +237,12 @@ const handler = async (req, res) => {
                             parameters: [
                               {
                                 type: 'text',
+                                parameter_name: "name",
                                 text: name
                               },
                               {
                                 type: 'text',
+                                parameter_name: "complain_number",
                                 text: complainNumber
                               }
                             ]
