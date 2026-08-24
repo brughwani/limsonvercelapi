@@ -1,5 +1,5 @@
 const verifyToken = require('./verifytoken');
-import corsMiddleware from './cors';
+const corsMiddleware = require('./cors').default || require('./cors');
 
 
 const withAuth = (handler) => {

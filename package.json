@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "node test-webhook.js"
+        "test": "node test-webhook.js && node test-verifytoken.js"
     },
     "author": "",
     "license": "ISC",
