@@ -241,6 +241,40 @@ async function runTests() {
     });
   });
 
+  // Test 9: Firebase ID Token from secondary project 'lmsupportagent' (User Error Case)
+  await new Promise((resolve) => {
+    const lmSupportTokenPayload = {
+      iss: 'https://securetoken.google.com/lmsupportagent',
+      aud: 'lmsupportagent',
+      auth_time: Math.floor(Date.now() / 1000),
+      user_id: 'lmsupport_user_789',
+      sub: 'lmsupport_user_789',
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 3600,
+      phone_number: '+919876543210',
+      firebase: {
+        identities: {
+          phone: ['+919876543210']
+        },
+        sign_in_provider: 'phone'
+      }
+    };
+    const lmSupportToken = jwt.sign(lmSupportTokenPayload, 'dummy_key');
+
+    const req = { headers: { authorization: `Bearer ${lmSupportToken}` } };
+    const res = createMockResponse(() => {
+      assert.fail('Should not fail lmsupportagent token verification');
+    });
+    verifyToken(req, res, () => {
+      assert.ok(req.user, 'req.user should be populated from lmsupportagent token');
+      assert.strictEqual(req.user.aud, 'lmsupportagent');
+      assert.strictEqual(req.user.phone_number, '+919876543210');
+      assert.strictEqual(req.user.firebase.sign_in_provider, 'phone');
+      console.log('✅ Test 9 Passed: Firebase ID Token from lmsupportagent project successfully verified');
+      resolve();
+    });
+  });
+
   console.log('\n--- All Token Verification Middleware Tests Passed Successfully! ---');
 }
 

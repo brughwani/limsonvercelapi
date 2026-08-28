@@ -13,6 +13,14 @@ const config = {
 };
 
 async function getRawBody(req) {
+  if (req.rawBody) {
+    return Buffer.isBuffer(req.rawBody) ? req.rawBody : Buffer.from(req.rawBody);
+  }
+  if (req.body) {
+    if (Buffer.isBuffer(req.body)) return req.body;
+    if (typeof req.body === 'string') return Buffer.from(req.body);
+    if (typeof req.body === 'object') return Buffer.from(JSON.stringify(req.body));
+  }
   return new Promise((resolve, reject) => {
     let chunks = [];
     req.on('data', (chunk) => chunks.push(chunk));
@@ -150,11 +158,13 @@ const handler = async (req, res) => {
   // B. Standard Complaint Registration Path (Requires Firebase Auth)
   if (req.method === 'POST') {
     try {
-      const rawBody = await getRawBody(req);
-      try {
-        req.body = JSON.parse(rawBody.toString('utf8'));
-      } catch (parseErr) {
-        return res.status(400).json({ error: 'Invalid JSON body' });
+      if (!req.body || typeof req.body !== 'object' || Buffer.isBuffer(req.body)) {
+        const rawBody = await getRawBody(req);
+        try {
+          req.body = JSON.parse(rawBody.toString('utf8'));
+        } catch (parseErr) {
+          return res.status(400).json({ error: 'Invalid JSON body' });
+        }
       }
 
       // Call the token verification middleware manually
