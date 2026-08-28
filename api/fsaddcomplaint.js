@@ -38,16 +38,33 @@ function normalizePhoneNumber(phone) {
   return cleaned;
 }
 
-if (!admin.apps.length) {
-  const serviceAccount = {
-    projectId: process.env.project_id,
-    privateKey: process.env.firebase_private_key.replace(/\\n/g, '\n'), // Handle newlines
-    clientEmail: process.env.client_email,
-  };
+const getEnv = (keys) => {
+  for (const key of keys) {
+    if (process.env[key]) return process.env[key];
+  }
+  return undefined;
+};
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+const projectId = getEnv(['project_id', 'PROJECT_ID', 'FIREBASE_PROJECT_ID', 'FIRESTORE_PROJECT_ID']);
+const privateKeyRaw = getEnv(['firebase_private_key', 'FIREBASE_PRIVATE_KEY', 'private_key', 'PRIVATE_KEY']);
+const clientEmail = getEnv(['client_email', 'CLIENT_EMAIL', 'FIREBASE_CLIENT_EMAIL', 'FIRESTORE_CLIENT_EMAIL']);
+
+if (!admin.apps.length) {
+  try {
+    if (projectId && privateKeyRaw && clientEmail) {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId,
+          privateKey: privateKeyRaw.replace(/\\n/g, '\n'),
+          clientEmail,
+        }),
+      });
+    } else if (process.env.FIREBASE_CONFIG) {
+      admin.initializeApp();
+    }
+  } catch (initErr) {
+    console.error('Error initializing Firebase Admin in fsaddcomplaint:', initErr);
+  }
 }
 
 const firestore = admin.firestore();
