@@ -104,15 +104,24 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
       return res.status(403).json({ error: 'Access denied' });
     }
 
-    // Generate custom token
-    // const customToken = await admin.auth().si
-    // .createCustomToken(userDoc.id, { role: userData.role  });
-   // Exchange custom token for ID token
-  //  const idTokenResponse = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithCustomToken?key=${process.env.firebase_private_key}`, {
-  //   token: customToken,
-  //   returnSecureToken: true
-  // });
-  const idToken = await getIdToken(email,password);
+    // Ensure Firebase Auth user exists with correct password before signing in
+    try {
+      // Try to get existing Auth user
+      const existingUser = await admin.auth().getUserByEmail(email);
+      // User exists — update password to match Firestore in case it's out of sync
+      await admin.auth().updateUser(existingUser.uid, { password: storedPassword });
+      console.log('Updated Firebase Auth password for:', email);
+    } catch (authError) {
+      if (authError.code === 'auth/user-not-found') {
+        // User doesn't exist in Firebase Auth — create them
+        await admin.auth().createUser({ email, password: storedPassword });
+        console.log('Created Firebase Auth user for:', email);
+      } else {
+        console.error('Error syncing Firebase Auth user:', authError);
+      }
+    }
+
+    const idToken = await getIdToken(email, storedPassword);
   console.log(userData)
 
   console.log('Role:', role);
