@@ -91,9 +91,10 @@ console.log(`Found ${userSnapshot1.size} user(s)`); // Log the number of users f
     // Create a dummy email from the phone number
     const email = `${trimmedPhone}@xyz.in`;
 
-    // Check password
-   // const passwordMatch = await bcrypt.compare(password, userData.password);
-    if (password!==userData.password) {
+    // Check password — field may be stored as 'password' or 'Password'
+    const storedPassword = userData.password || userData.Password;
+    console.log('Stored password field:', { lowercase: userData.password, uppercase: userData.Password, resolved: storedPassword });
+    if (!storedPassword || password.trim() !== storedPassword.trim()) {
       return res.status(400).json({ error: 'Invalid password' });
     }
 
