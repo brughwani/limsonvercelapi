@@ -1,6 +1,5 @@
 const admin = require('firebase-admin');
 
-const withAuth = require('../lib/middleware/withAuth');
 //const { Firestore } = require('@google-cloud/firestore');
 
 if (!admin.apps.length) {
@@ -19,6 +18,14 @@ if (!admin.apps.length) {
 const firestore = admin.firestore();
 
 module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
   const { refreshToken } = req.body;
 
   if (!refreshToken) {
