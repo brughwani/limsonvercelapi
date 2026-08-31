@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 import { NextResponse, NextRequest } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-const withAuth = require('./middleware/withAuth');
+const withAuth = require('../lib/middleware/withAuth');
 
 if (!admin.apps.length) {
   try {

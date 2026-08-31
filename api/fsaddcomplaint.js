@@ -1,6 +1,6 @@
 const crypto = require('crypto');
-const verifyToken = require('./middleware/verifytoken');
-const corsMiddleware = require('./middleware/cors').default;
+const verifyToken = require('../lib/middleware/verifytoken');
+const corsMiddleware = require('../lib/middleware/cors').default;
 const { Firestore } = require('firestore');
 const axios = require('axios');
 const admin = require('firebase-admin');
