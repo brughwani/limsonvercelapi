@@ -220,6 +220,28 @@ const handler = async (req, res) => {
 
             console.log('Data to be inserted:', data);
 
+            // Duplicate check: same Phone + Product name + Purchase date
+            const purchaseDateISO = data['Purchase date']; // already ISO string
+            const duplicateSnapshot = await firestore.collection('Admin')
+              .where('Phone', '==', data['Phone'])
+              .where('Product name', '==', data['Product name'])
+              .get();
+
+            const isDuplicate = duplicateSnapshot.docs.some(doc => {
+              const existing = doc.data();
+              // Compare Purchase date as ISO strings (both are stored as ISO)
+              return existing['Purchase date'] === purchaseDateISO;
+            });
+
+            if (isDuplicate) {
+              console.warn('Duplicate complaint detected, rejecting registration.');
+              return resolve(
+                res.status(409).json({
+                  error: 'Duplicate complaint: a complaint for this phone number, product, and purchase date already exists.'
+                })
+              );
+            }
+
             // Insert data into Firestore
             const docRef = await firestore.collection('Admin').add(data);
 
