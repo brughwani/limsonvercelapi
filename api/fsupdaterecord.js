@@ -78,7 +78,14 @@ console.log(updates)
 
 
       const docRef = firestore.collection('Admin').doc(updates.id);
-      await docRef.update(updates.fields);
+
+      // Build update using FieldPath objects to safely handle field names
+      // that contain spaces, dots, or other special characters (e.g. "Complaint no.")
+      const updateArgs = [];
+      for (const [key, value] of Object.entries(updates.fields)) {
+        updateArgs.push(new admin.firestore.FieldPath(key), value);
+      }
+      await docRef.update(...updateArgs);
 
       return res.status(200).json({
         message: 'Records updated successfully',
